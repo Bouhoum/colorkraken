@@ -1,0 +1,39 @@
+{
+  "deprecated": false,
+  "description": "Hsl color integration with tailwind (beta)",
+  "keywords": [
+    "hsl",
+    "colors",
+    "css",
+    "color",
+    "colorkraken",
+    "tailwind v2.0",
+    "integration",
+    "tailwind",
+    "colors",
+    "custom",
+    "colors",
+    "npm-colorkraken",
+    "customize your palette",
+    "tailwind custom palette",
+    "custom tailwind colors"
+  ],
+  "license": "MIT",
+  "main": "./index.js",
+  "name": "colorkraken",
+  "version": "1.0.18",
+  "dependencies": {},
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Bouhoum/colorkraken.git"
+  },
+  "author": "Mohamed Ali bouhoum",
+  "bugs": {
+    "url": "https://github.com/Bouhoum/colorkraken/issues"
+  },
+  "homepage": "https://github.com/Bouhoum/colorkraken#readme"
+}
