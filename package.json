@@ -20,7 +20,7 @@
   ],
   "license": "MIT",
   "main": "./index.js",
-  "name": "colorkraken",
+  "name": "@Bouhoum/colorkraken",
   "version": "1.0.19",
   "dependencies": {},
   "devDependencies": {},
@@ -30,6 +30,9 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Bouhoum/colorkraken.git"
+  },
+  "publishConfig": {
+    "registry":"https://npm.pkg.github.com"
   },
   "author": "Mohamed Ali bouhoum",
   "bugs": {
