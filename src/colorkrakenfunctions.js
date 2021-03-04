@@ -1,5 +1,8 @@
 // Beta version of the project
-const colorkraken = require('../../../colorkraken-config.js' );
+const path = require("path")
+
+const configFilePath = path.join(process.cwd(), "colorkraken-config.js")
+const colorkraken = require(configFilePath);
 
 // Convert Hex To Rgb
 
