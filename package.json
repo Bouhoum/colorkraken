@@ -21,7 +21,7 @@
   "license": "MIT",
   "main": "./index.js",
   "name": "colorkraken",
-  "version": "1.0.20",
+  "version": "1.0.21",
   "dependencies": {},
   "devDependencies": {},
   "scripts": {
