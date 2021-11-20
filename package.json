@@ -1,6 +1,6 @@
 {
   "deprecated": false,
-  "description": "Hsl color integration with tailwind (beta)",
+  "description": "Color shades generator, integration with tailwind",
   "keywords": [
     "hsl",
     "colors",
@@ -21,7 +21,7 @@
   "license": "MIT",
   "main": "./index.js",
   "name": "colorkraken",
-  "version": "1.0.21",
+  "version": "1.1.21",
   "dependencies": {},
   "devDependencies": {},
   "scripts": {

@@ -1,129 +1,148 @@
-// Beta version of the project
-const path = require("path")
+const path = require("path");
 
-const configFilePath = path.join(process.cwd(), "colorkraken-config.js")
+const configFilePath = path.join(process.cwd(), "colorkraken-config.js");
 const colorkraken = require(configFilePath);
 
-// Convert Hex To Rgb
-
-function hexToRgb(h) {
+hexToRgba = (hexColor, isHex) => {
   let r = 0,
     g = 0,
     b = 0,
-    rgb = []
-
-  // 3 digits
-  if (h.length === 4) {
-    r = "0x" + h[1] + h[1]
-    g = "0x" + h[2] + h[2]
-    b = "0x" + h[3] + h[3]
-
-    // 6 digits
-  } else if (h.length === 7) {
-    r = "0x" + h[1] + h[2]
-    g = "0x" + h[3] + h[4]
-    b = "0x" + h[5] + h[6]
+    a = 1,
+    rgba = [];
+  if (isHex) {
+    if (hexColor.length === 4) {
+      r = "0x" + hexColor[1] + hexColor[1];
+      g = "0x" + hexColor[2] + hexColor[2];
+      b = "0x" + hexColor[3] + hexColor[3];
+    } else if (hexColor.length === 7) {
+      r = "0x" + hexColor[1] + hexColor[2];
+      g = "0x" + hexColor[3] + hexColor[4];
+      b = "0x" + hexColor[5] + hexColor[6];
+    }
+    rgba.push(+r, +g, +b, +a);
+  } else if (!isHex) {
+    if (hexColor.length === 3) {
+      r = "0x" + hexColor[0] + hexColor[0];
+      g = "0x" + hexColor[1] + hexColor[1];
+      b = "0x" + hexColor[2] + hexColor[2];
+    } else if (hexColor.length === 6) {
+      r = "0x" + hexColor[0] + hexColor[1];
+      g = "0x" + hexColor[2] + hexColor[3];
+      b = "0x" + hexColor[4] + hexColor[5];
+    }
+    rgba.push(+r, +g, +b, +a);
   }
-  rgb.push(+r, +g, +b)
-  return rgb
-}
+  return rgba;
+};
 
-// Rgb To HSL
+mixColors = (overlay, targetColor) => {
+  var mix = [];
+  mix[3] = 1 - (1 - overlay[3]) * (1 - targetColor[3]); // alpha
+  mix[0] = Math.round(
+    (overlay[0] * overlay[3]) / mix[3] +
+      (targetColor[0] * targetColor[3] * (1 - overlay[3])) / mix[3]
+  ); // red
+  mix[1] = Math.round(
+    (overlay[1] * overlay[3]) / mix[3] +
+      (targetColor[1] * targetColor[3] * (1 - overlay[3])) / mix[3]
+  ); // green
+  mix[2] = Math.round(
+    (overlay[2] * overlay[3]) / mix[3] +
+      (targetColor[2] * targetColor[3] * (1 - overlay[3])) / mix[3]
+  ); // blue
+  return mix;
+};
 
-function rgbToHsl(r, g, b) {
-  // Make r, g, and b fractions of 1
-  r /= 255
-  g /= 255
-  b /= 255
-
-  // Find greatest and smallest channel values
-  let cmin = Math.min(r, g, b),
-    cmax = Math.max(r, g, b),
-    delta = cmax - cmin,
-    h = 0,
-    s = 0,
-    l = 0,
-    hsl = []
-  // Calculate hue
-  // No difference
-  if (delta === 0) h = 0
-  // Red is max
-  else if (cmax === r) h = ((g - b) / delta) % 6
-  // Green is max
-  else if (cmax === g) h = (b - r) / delta + 2
-  // Blue is max
-  else h = (r - g) / delta + 4
-
-  h = Math.round(h * 60)
-
-  // Make negative hues positive behind 360°
-  if (h < 0) h += 360
-
-  // Calculate lightness
-  l = (cmax + cmin) / 2
-
-  // Calculate saturation
-  s = delta === 0 ? 0 : delta / (1 - Math.abs(2 * l - 1))
-
-  // Multiply l and s by 100
-  s = +(s * 100).toFixed(0)
-  l = +(l * 100).toFixed(0)
-
-  hsl.push(+h, +s, +l);
-  return hsl
-}
-
-// Add export default before function mainColor
-
-function mainColor(h, s, l, name) {
- 
-  let $100 = "hsl(" + h + "," + s + "%," + (l + 40) + "%)"
-  let $200 = "hsl(" + h + "," + s + "%," + (l + 30) + "%)"
-  let $300 = "hsl(" + h + "," + s + "%," + (l + 20) + "%)"
-  let $400 = "hsl(" + h + "," + s + "%," + (l + 10) + "%)"
-  let $500 = "hsl(" + h + "," + s + "%," + l + "%)"
-  let $600 = "hsl(" + h + "," + s + "%," + (l - 10) + "%)"
-  let $700 = "hsl(" + h + "," + s + "%," + (l - 20) + "%)"
-  let $800 = "hsl(" + h + "," + s + "%," + (l - 30) + "%)"
-  let $900 = "hsl(" + h + "," + s + "%," + (l - 40) + "%)"
-  
-  let colors = { [`${name}`]: {
-    100 : $100,
-    200 : $200,
-    300 : $300,
-    400 : $400,
-    500 : $500,
-    600 : $600,
-    700 : $700,
-    800 : $800,
-    900 : $900,
+prepareOverlays = (targetColor, name) => {
+  var preparedOverlays = [];
+  for (let i = 0; i < 10; i++) {
+    const whiteOverlay = [255, 255, 255];
+    const blackOverlay = [0, 0, 0];
+    let newOverlay;
+    let preparedOverlay = {};
+    if (i == 0) {
+      newOverlay = targetColor;
+      name = `${(i + 1) * 500}`;
+    } else if (i > 0 && i < 5) {
+      whiteOverlay[3] = i / 10;
+      newOverlay = whiteOverlay;
+      name = `${900 - (i * 100 + 400)}`;
+    } else if (i > 0 && i > 5) {
+      blackOverlay[3] = (i - 5) / 10;
+      newOverlay = blackOverlay;
+      name = `${i * 100}`;
+    }
+    if (i != 5) {
+      preparedOverlay = {
+        name: name,
+        overlay: newOverlay,
+      };
+      preparedOverlays.push(preparedOverlay);
+    }
   }
+  return preparedOverlays;
+};
+
+checkInput = (input, name) => {
+  const hex = new RegExp("^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$");
+  const notHex = new RegExp("^([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$");
+  let results;
+
+  if (hex.test(input)) {
+    results = results = {
+      valid: true,
+      isHex: true,
+    };
+  } else if (notHex.test(input)) {
+    results = {
+      valid: true,
+      isHex: false,
+    };
+  } else {
+    results = {
+      message: `❌ ${name}: ${input} is not valid`,
+      valid: false,
+    };
+    // console.log(results);
   }
-  return colors
-}
+  return results;
+};
 
-let classNames = colorkraken.arguments;
+let userInputs = colorkraken.arguments;
+let colors = userInputs.map((userInput) => {
+  // checkInput and call convertor,
+  const inputValidator = checkInput(userInput.value, userInput.name);
 
-let colors = classNames.map(function(className) {
-  let rgb = hexToRgb(className.value);
-
-let r = rgb[0];
-let g = rgb[1];
-let b = rgb[2];
-
-let hsl = rgbToHsl(r, g, b);
-
-let h = hsl[0];
-let s = hsl[1];
-let l = hsl[2];
-
-let color = mainColor(h, s, l, className.name);
-
-let colors = color;
-
-return colors;
-
-})
-
+  if (inputValidator.valid) {
+    let targetColor = hexToRgba(userInput.value, inputValidator.isHex);
+    // take converted color and prepare overlays
+    const newOverlays = prepareOverlays(targetColor, userInput.name);
+    let className = userInput.name;
+    // mix the colors with overlays using overlays as loop
+    const colorsArray = newOverlays.map((overlayss) => {
+      let mixedColors = {};
+      const mixed = mixColors(overlayss.overlay, targetColor);
+      let classNumber = overlayss.name;
+      mixedColors = {
+        [`${classNumber}`]: `rgba(${mixed[0]}, ${mixed[1]}, ${mixed[2]}, ${mixed[3]})`,
+      };
+      return mixedColors;
+    });
+    // turn array to obj
+    let colorsObj = colorsArray.reduce(
+      (acc, elem) => ({ ...acc, ...elem }),
+      {}
+    );
+    // store colors with their classNames
+    let finalOutPut = {
+      [`${className}`]: colorsObj,
+    };
+    console.log("ColorKraken - ✅", userInput.name, "added successfuly");
+    return finalOutPut;
+  } else if (!inputValidator.valid) {
+    console.log("ColorKraken -", inputValidator.message);
+    return inputValidator.message;
+  }
+});
 
 module.exports = colors;

@@ -1,8 +1,7 @@
-# Color Kraken (Beta)
+# ColorKraken (Beta)
 
-Color Kraken is an hsl tailwind integration that generates custom color shades from a given hexcolor
-
-Dark mode support is coming soon
+ColorKraken is a tailwind integration that generates custom color shades from a given hexcolor
+From a designer to developers
 
 ## Installation
 
@@ -50,33 +49,35 @@ npm run build:css
 
 ## List of available sub class
 
-Color Kraken returns an object that contains all your classnames and colors converted to hsl
+Color Kraken returns an object that contains all your classnames and colors converted to rgba
 
 ```javascript
 {
-  primary: {
-    '100': 'hsl(269,33%,78%)',
-    '200': 'hsl(269,33%,68%)',
-    '300': 'hsl(269,33%,58%)',
-    '400': 'hsl(269,33%,48%)',
-    '500': 'hsl(269,33%,38%)',
-    '600': 'hsl(269,33%,28%)',
-    '700': 'hsl(269,33%,18%)',
-    '800': 'hsl(269,33%,8%)',
-    '900': 'hsl(269,33%,-2%)'
+    primary: {
+      '100': 'rgba(160, 141, 179, 1)',
+      '200': 'rgba(144, 122, 167, 1)',
+      '300': 'rgba(128, 103, 154, 1)',
+      '400': 'rgba(112, 84, 142, 1)',
+      '500': 'rgba(96, 65, 129, 1)',
+      '600': 'rgba(86, 59, 116, 1)',
+      '700': 'rgba(77, 52, 103, 1)',
+      '800': 'rgba(67, 46, 90, 1)',
+      '900': 'rgba(58, 39, 77, 1)'
+    }
   },
-  secondary: {
-    '100': 'hsl(31,93%,98%)',
-    '200': 'hsl(31,93%,88%)',
-    '300': 'hsl(31,93%,78%)',
-    '400': 'hsl(31,93%,68%)',
-    '500': 'hsl(31,93%,58%)',
-    '600': 'hsl(31,93%,48%)',
-    '700': 'hsl(31,93%,38%)',
-    '800': 'hsl(31,93%,28%)',
-    '900': 'hsl(31,93%,18%)'
+  {
+    secondary: {
+      '100': 'rgba(251, 192, 131, 1)',
+      '200': 'rgba(250, 182, 110, 1)',
+      '300': 'rgba(249, 171, 89, 1)',
+      '400': 'rgba(249, 161, 69, 1)',
+      '500': 'rgba(248, 150, 48, 1)',
+      '600': 'rgba(223, 135, 43, 1)',
+      '700': 'rgba(198, 120, 38, 1)',
+      '800': 'rgba(174, 105, 34, 1)',
+      '900': 'rgba(149, 90, 29, 1)'
+    }
   }
-}
 ```
 To access your new custom color using tailwind ```text-primary-500 active:text-primary-700 hover:text-primary-300 ``` 
 ⚠️By default, the active variant is not enabled for any core plugins⚠️ 
